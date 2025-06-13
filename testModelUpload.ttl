@@ -1,0 +1,35 @@
+@prefix ocmv: <https://w3id.org/ontouml-models/vocabulary#>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix mod: <https://w3id.org/mod#>.
+@prefix dct: <http://purl.org/dc/terms/>.
+@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
+@prefix dcat: <http://www.w3.org/ns/dcat#>.
+@prefix lcc: <http://id.loc.gov/authorities/classification/>.
+
+<https://w3id.org/ontouml-models/model/formula-one2023/> a dcat:Dataset, mod:SemanticArtefact;
+    dct:title "Formula One Example Ontology";
+    mod:acronym "Formula One";
+    dct:issued "2023"^^xsd:gYear;
+    dcat:theme lcc:G;
+    dct:language "en";
+    dct:license <https://creativecommons.org/licenses/by/4.0/>;
+    mod:designedForTask ocmv:Example;
+    ocmv:context ocmv:Research.
+<https://w3id.org/ontouml-models/model/formula-one2023/> dcat:distribution <https://w3id.org/ontouml-models/model/formula-one2023/distribution/ttl>.
+<https://w3id.org/ontouml-models/model/formula-one2023/distribution/ttl> a dcat:Distribution;
+    dct:title "Turtle distribution of \"Formula One Example Ontology\""@en;
+    dcat:mediaType <https://www.iana.org/assignments/media-types/text/turtle>;
+    dcat:downloadURL <https://raw.githubusercontent.com/unibz-core/ontouml-models/master/formula-one2023/ontology.ttl>.
+<https://w3id.org/ontouml-models/model/formula-one2023/> dcat:distribution <https://w3id.org/ontouml-models/model/formula-one2023/distribution/ttl>.
+<https://w3id.org/ontouml-models/model/formula-one2023/distribution/ttl> a dcat:Distribution;
+    dct:title "JSON distribution of \"Formula One Example Ontology\""@en;
+    dcat:mediaType <https://www.iana.org/assignments/media-types/application/json>;
+    dcat:downloadURL <https://raw.githubusercontent.com/unibz-core/ontouml-models/master/formula-one2023/ontology.json>.
+<https://w3id.org/ontouml-models/model/formula-one2023/> dcat:distribution <https://w3id.org/ontouml-models/model/formula-one2023/distribution/ttl>.
+<https://w3id.org/ontouml-models/model/formula-one2023/distribution/ttl> a dcat:Distribution;
+    dct:title "Turtle distribution of \"Formula One Example Ontology\""@en;
+    dcat:mediaType <https://www.visual-paradigm.com/vpp>;
+    dcat:downloadURL <https://raw.githubusercontent.com/unibz-core/ontouml-models/master/formula-one2023/ontology.vpp>.
