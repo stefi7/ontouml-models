@@ -1,0 +1,29 @@
+# docker-compose.yml
+
+version: '3'
+services:
+    fdp:
+        image: fairdata/fairdatapoint:1.16
+        volumes:
+            - ./volumes/application.yml:/fdp/application.yml:ro
+
+    fdp-client:
+        image: fairdata/fairdatapoint-client:1.16
+        environment:
+            - FDP_HOST=fdp
+        ports:
+            - 81:80
+
+    mongo:
+        image: mongo:4.0.12
+        ports:
+            - "127.0.0.1:27017:27017"
+        volumes:
+            - ./volumes/mongo/data:/data/db
+
+    blazegraph:
+        image: metaphacts/blazegraph-basic:2.2.0-20160908.003514-6
+        volumes:
+            - ./volumes/blazegraph:/blazegraph-data
+        ports:
+            - "127.0.0.1:8080:8080"
