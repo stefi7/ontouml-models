@@ -27,6 +27,7 @@ jobs:
       MODELS_DIR:        ${{ secrets.MODELS_DIR }}
       METADATA_FILENAME: ${{ secrets.METADATA_FILENAME }}
       CATALOG_URI:       ${{ secrets.CATALOG_URI }}
+      FDP_URL:           ${{ secrets.FDP_URL }}
 
     steps:
       - name: Checkout repository

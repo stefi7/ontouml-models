@@ -21,6 +21,7 @@ required_vars = [
     "MODELS_DIR",
     "METADATA_FILENAME",
     "CATALOG_URI",
+    "FDP_URL"
 ]
 
 #make sure all env variables are there
@@ -38,6 +39,7 @@ FDP_PASSWORD      = env["FDP_PASSWORD"]
 MODELS_DIR        = env["MODELS_DIR"]
 METADATA_FILENAME = env["METADATA_FILENAME"]
 CATALOG_URI       = env["CATALOG_URI"]
+FDP_URL           = env["FDP_URL"]
 
 #constants
 UUID_RE = re.compile(r'^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$') #compiled regex
@@ -83,7 +85,7 @@ def is_permanent(subject) -> bool:
 
 # log in to fdp 
 def login():
-    url = "http://localhost:81/tokens"
+    url = FDP_URL + "/tokens"
     payload = {"email": FDP_EMAIL, "password": FDP_PASSWORD}
     resp = requests.post(url, json=payload)
     if not resp.ok:
@@ -141,7 +143,7 @@ def getNewId(file_path: str, git, token: str):
     # send POST request to FDP including token, so server knows we're authenticated
     ttl = path.read_text(encoding="utf-8") #read ttl back into string 
     resp = requests.post(
-        "http://localhost:81/model",
+        FDP_URL + "model",
         data=ttl,
         headers={
             "Content-Type":  "text/turtle",
