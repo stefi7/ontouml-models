@@ -1,5 +1,3 @@
-
-
 # OntoUML/UFO Catalog
 
 <p align="center"><img src="https://user-images.githubusercontent.com/8641647/223740939-1abcd2af-e954-4d19-b087-56f1be4417c3.png" width="500">
