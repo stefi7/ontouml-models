@@ -1,0 +1,47 @@
+name: Sync
+
+on:
+  pull_request:
+    types: [closed]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  run-sync-script:
+    # Only run when the PR was merged and has the "sync" label
+    if: >
+      github.event.pull_request.merged == true &&
+      contains(
+        github.event.pull_request.labels.*.name,
+        'sync'
+      )
+    runs-on: ubuntu-latest
+
+    env:
+      FDP_EMAIL:         ${{ secrets.FDP_EMAIL }}
+      FDP_PASSWORD:      ${{ secrets.FDP_PASSWORD }}
+      MODELS_DIR:        ${{ secrets.MODELS_DIR }}
+      METADATA_FILENAME: ${{ secrets.METADATA_FILENAME }}
+      CATALOG_URI:       ${{ secrets.CATALOG_URI }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: |
+          if [ -f requirements.txt ]; then
+            pip install --upgrade pip
+            pip install -r requirements.txt
+          fi
+
+      - name: Run sync script
+        run: |
+          python scripts/sync_to_fdp.py
