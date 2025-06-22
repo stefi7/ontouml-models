@@ -3,6 +3,7 @@ from pathlib import Path
 from rdflib import Graph, BNode, URIRef, Namespace, Literal
 from rdflib.namespace import XSD
 from rdflib.namespace import RDF
+from dotenv import load_dotenv
 import random
 import string
 import re
@@ -10,14 +11,38 @@ import requests
 import os
 import sys
 
-#Configuration
-FDP_EMAIL = 's.zaharie@student.utwente.nl'
-FDP_PASSWORD = 'admin'
-MODELS_DIR = 'models'
-METADATA_FILENAME = 'metadata.ttl'
+#load from .env
+load_dotenv()
+
+#list of required env variables
+required_vars = [
+    "FDP_EMAIL",
+    "FDP_PASSWORD",
+    "MODELS_DIR",
+    "METADATA_FILENAME",
+    "CATALOG_URI",
+]
+
+#make sure all env variables are there
+env = { var: os.getenv(var) for var in required_vars }
+missing = [var for var, val in env.items() if not val]
+
+if missing:
+    raise RuntimeError(
+        "Missing required environment variables: " +
+        ", ".join(missing)
+    )
+
+FDP_EMAIL         = env["FDP_EMAIL"]
+FDP_PASSWORD      = env["FDP_PASSWORD"]
+MODELS_DIR        = env["MODELS_DIR"]
+METADATA_FILENAME = env["METADATA_FILENAME"]
+CATALOG_URI       = env["CATALOG_URI"]
+
+#constants
 UUID_RE = re.compile(r'^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$') #compiled regex
-CATALOG_URI = "https://w3id.org/ontouml-models/catalog/b663ca18-8085-44a7-bcfe-2c2b5ba1faa8" # files that were not uploaded to FDP don't have the link to the catalog
-DCTERMS     = Namespace("http://purl.org/dc/terms/")
+DCTERMS = Namespace("http://purl.org/dc/terms/")
+
 
 #loads the ttl, creates a graph and takes the first subject node which should be the id
 def get_subject(file_path: Path):
@@ -25,7 +50,7 @@ def get_subject(file_path: Path):
     g.parse(str(file_path), format='turtle')
 
     DCAT = Namespace("http://www.w3.org/ns/dcat#")
-    # Goes through all subjects that have specified predicate and object, assuming one dcat:Dataset at the top
+    #goes through all subjects that have specified predicate and object, assuming one dcat:Dataset at the top
     for s in g.subjects(RDF.type, DCAT.Dataset): # (predicate, object)
         return s
 
@@ -35,12 +60,14 @@ def get_subject(file_path: Path):
 
     return None
 
+
 # injects the catalog uri into the temporary metadata.ttl file
 def inject_parent(file_path: Path, subject):
     g = Graph()
     g.parse(str(file_path), format="turtle")
     g.add((subject, DCTERMS.isPartOf, URIRef(CATALOG_URI))) # inserting the catalog triple
     g.serialize(destination=str(file_path), format="turtle") # overwrite the original file with the complete one
+
 
 # checks if the id is permanent by checking if last segment is matching with UUID_RE defined in the configuration
 # returns true if id is permanent, false otherwise
@@ -53,6 +80,7 @@ def is_permanent(subject) -> bool:
         return bool(UUID_RE.match(last))
     return False
 
+
 # log in to fdp 
 def login():
     url = "http://localhost:81/tokens"
@@ -62,6 +90,7 @@ def login():
         print(f"Login failed: {resp.status_code} {resp.text}", file=sys.stderr)
         sys.exit(1) # exit the script to prevent further calls to the server
     return resp.json().get("token")
+
 
 # prepatch ttl with catalog, keyword mediatype and isComplete (required by SHACL)
 # POST to FDP. If succesful, write back file with permanent id and stage
@@ -133,7 +162,6 @@ def getNewId(file_path: str, git, token: str):
     path.write_text(resp.text, encoding="utf-8")
     git.add(str(path))
     print(f"   ✓ Synced {file_path}")
-
 
 
 def main():

@@ -8,7 +8,7 @@
 **/*.lck
 
 # Local only folders
-env
+.env
 metadata.csv
 
 # Files to be added as releases
