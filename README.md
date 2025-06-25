@@ -2,6 +2,11 @@
 
 This repository provides a Python script and a GitHub Actions workflow to automatically synchronize model metadata to a FAIR Data Point (FDP) on merged pull requests labeled `sync`.
 
+> **Prerequisites**
+>
+> * A running FAIR Data Point (FDP) server. You must provide your own FDP instance before using this tool.
+> * The FDP should support the standard DCAT hierarchy: **catalog → dataset → distribution**. Note that implementations may vary—ensure your FDP’s structure matches or adjust the `CATALOG_URI` and script logic accordingly.
+
 ## Installation
 
 ```bash
@@ -25,14 +30,19 @@ pip install -r requirements.txt
 2. Open `.env` and fill in your values:
 
    ```dotenv
+   # Your FDP credentials and endpoint
    FDP_EMAIL=you@example.com
    FDP_PASSWORD=supersecret
    FDP_URL=https://fdp.example.com/api
+
+   # Local paths and identifiers
    MODELS_DIR=./models
    METADATA_FILENAME=metadata.ttl
    CATALOG_URI=https://fdp.example.com/catalogs/<CATALOG_ID>
    ```
-3. (For CI) Add the same variables as GitHub Secrets or in your chosen Environment.
+3. (For CI) Add the same variables as GitHub Secrets or under a chosen GitHub Environment.
+
+> **Caution:** Different FDP instances may organize catalogs, datasets, and distributions in slightly different ways. Review and, if necessary, adapt the `CATALOG_URI` or script code to match your FDP’s actual structure.
 
 ## Quick Start
 
