@@ -1,4 +1,5 @@
 # This repository contains my Bachelor's thesis project, developed as part of my undergraduate studies.
+<br>
 
 # Sync to FDP
 
