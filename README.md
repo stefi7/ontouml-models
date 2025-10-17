@@ -1,3 +1,5 @@
+# This repository contains my Bachelor's thesis project, developed as part of my undergraduate studies.
+
 # Sync to FDP
 
 This repository provides a Python script and a GitHub Actions workflow to automatically synchronize model metadata to a FAIR Data Point (FDP) on merged pull requests labeled `sync`.
